@@ -42,13 +42,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Angle: 0
-    - _Color: 0.36000127
+    - _Color: 1
     - _EnableExternalAlpha: 0
-    - _MaxIter: 162
-    - _Repeat: 2.02
-    - _Speed: 0
+    - _MaxIter: 1000
+    - _Repeat: 8.6206
+    - _Speed: 0.03
     m_Colors:
-    - _Area: {r: 0, g: 0, b: 4.02, a: 2.9917755}
+    - _Area: {r: -0.28805482, g: -0.058091816, b: 4.9487686, a: 3.1624045}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

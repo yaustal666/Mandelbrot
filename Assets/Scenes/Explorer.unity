@@ -1144,9 +1144,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mat: {fileID: 2100000, guid: d71a4f7dd243c9143a83b7aeb745c55d, type: 2}
   pos: {x: 0, y: 0}
+  maxIter: 148
   scale: 4.02
   angle: 0
-  maxIter: 148
   repeat: 2.02
   color: 0.2
   speed: 0
@@ -1777,7 +1777,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1241476089317309449, guid: 31a0e9be34df0c14cad06752bfea1217, type: 3}
       propertyPath: m_text
-      value: Animation speed
+      value: Color speed
       objectReference: {fileID: 0}
     - target: {fileID: 1241476089317309449, guid: 31a0e9be34df0c14cad06752bfea1217, type: 3}
       propertyPath: m_fontColor.b

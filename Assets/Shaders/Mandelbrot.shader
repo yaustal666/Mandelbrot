@@ -67,12 +67,19 @@ Shader "Explorer/Mandelbrot"
                 float2 c = _Area.xy + uv * _Area.zw;
                 c = rot(c, _Area.xy, _Angle);
 
-                float r = 20;
+                float r = 16;
                 float2 z;
                 float iter;
 
                 for(iter = 0; iter < _MaxIter; iter++) {
+                    // standard Mandelbrot
                     z = float2(z.x * z.x - z.y * z.y, 2 * z.x * z.y) + c;
+
+                    //z^3 Mandelbrot
+                    //z = float2(z.x * z.x * z.x - 3 * z.x * z.y * z.y, 3 * z.x * z.x * z.y - z.y * z.y * z.y) + c;
+
+                    //z^4 Mandelbrot
+                    //z = float2(z.x * z.x * z.x * z.x - 6 * z.x * z.x * z.y * z.y + z.y * z.y * z.y * z.y, 4 * z.x * z.x * z.x * z.y - 4 * z.x * z.y *z.y *z.y) + c;
                     if(length(z) > r) {
                         break;
                     }
@@ -80,15 +87,16 @@ Shader "Explorer/Mandelbrot"
 
                 if (iter >= _MaxIter) return 0;
 
+                //smoothing coloring
                 float dist = length(z);
-                float fracIter;
-                fracIter = log2(log(dist) / log(r));
-                iter -= fracIter;
+                float smoothIter;
+                smoothIter = log2(log(dist) / log(r));
+                iter -= smoothIter;
 
                 float m = sqrt(iter / _MaxIter);
                 float4 col;
-                // float4 col = sin(float4(0.3, 0.45, 0.65, 1) * m * 20) * 0.5 + 0.5; // coloring using sinus
-                col = tex2D(_MainTex, float2(m * _Repeat + _Time.y * _Speed, _Color)); // coloring from texture
+                col = tex2D(_MainTex, float2(m * _Repeat + _Time.y * _Speed, _Color));
+
                 return col;
             }
             ENDCG

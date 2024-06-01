@@ -1,24 +1,32 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Explorer : MonoBehaviour
+public class MandelbrotExplorer : MonoBehaviour
 {
     [SerializeField] private Material mat;
     [SerializeField] private Vector2 pos;
+
     [SerializeField] private int maxIter;
+
     [SerializeField] private float scale;
     [SerializeField] private float angle;
-    [SerializeField] private float repeat = 3.0f;
-    [SerializeField] private float color = 0.1f;
-    [SerializeField] private float speed = 0.0f;
 
-    private bool isSmooth = false;
-    private bool isAnimationOn = false;
+    [SerializeField] private float repeat;
+    [SerializeField] private float color;
+    [SerializeField] private float speed;
 
     [SerializeField] private RawImage img;
 
     [SerializeField] private Vector2 smoothPos;
     [SerializeField] private float smoothScale, smoothAngle;
+
+    private bool isSmooth = false;
+    private bool isAnimationOn = false;
+
+    [SerializeField] private float scaleInSpeed = 0.99f;
+    [SerializeField] private float scaleOutSpeed = 1.01f;
+    [SerializeField] private float rotationSpeed = 0.01f;
+    [SerializeField] private float movingSpeed = 0.01f;
 
     private void Start()
     {
@@ -58,6 +66,8 @@ public class Explorer : MonoBehaviour
         if (aspect > 1f) scaleY /= aspect;
         else scaleX *= aspect;
 
+        mat.SetFloat("_MaxIter", maxIter);
+
         if (isSmooth)
         {
             mat.SetVector("_Area", new Vector4(smoothPos.x, smoothPos.y, scaleX, scaleY));
@@ -68,9 +78,8 @@ public class Explorer : MonoBehaviour
             mat.SetFloat("_Angle", angle);
         }
 
-        mat.SetFloat("_MaxIter", maxIter);
-        mat.SetFloat("_Repeat", repeat);
         mat.SetFloat("_Color", color);
+        mat.SetFloat("_Repeat", repeat);
         mat.SetFloat("_Speed", speed);
     }
 
@@ -79,19 +88,30 @@ public class Explorer : MonoBehaviour
         // zooming
         if(Input.GetKey(KeyCode.Z))
         {
-            scale *= 0.99f;
+            scale *= scaleInSpeed;
         }
 
         if (Input.GetKey(KeyCode.X))
         {
-            scale *= 1.01f;
+            scale *= scaleOutSpeed;
+        }
+
+        //rotating
+        if (Input.GetKey(KeyCode.E))
+        {
+            angle += rotationSpeed;
+        }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            angle -= rotationSpeed;
         }
 
         // moving
-        Vector2 dir = new Vector2(scale * 0.01f, 0);
+        Vector2 dir = new Vector2(scale * movingSpeed, 0); // making moving speed aware of scale
         float s = Mathf.Sin(angle);
         float c = Mathf.Cos(angle);
-        dir = new Vector2(dir.x * c, dir.x * s);
+        dir = new Vector2(dir.x * c, dir.x * s); // rotating our direction
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -103,7 +123,7 @@ public class Explorer : MonoBehaviour
             pos += dir;
         }
 
-        dir = new Vector2(-dir.y, dir.x);
+        dir = new Vector2(-dir.y, dir.x); // rotate dir 90 degrees left for up-down direction
         if (Input.GetKey(KeyCode.W))
         {
             pos += dir;
@@ -114,16 +134,6 @@ public class Explorer : MonoBehaviour
             pos -= dir;
         }
 
-        //rotating
-        if (Input.GetKey(KeyCode.E))
-        {
-            angle += 0.01f;
-        }
-
-        if (Input.GetKey(KeyCode.Q))
-        {
-            angle -= 0.01f;
-        }
     }
 
     public void setMaxIterations(float val)
@@ -142,13 +152,13 @@ public class Explorer : MonoBehaviour
     {
         speed = val / 100.0f;
     }
-    public void toggleSmoothMoving(bool b)
+    public void toggleSmoothMoving(bool isOn)
     {
-        isSmooth = b;
+        isSmooth = isOn;
     }
-    public void toggleAnimation(bool b)
+    public void toggleAnimation(bool isOn)
     {
-        isAnimationOn = b;
+        isAnimationOn = isOn;
     }
 }
 
